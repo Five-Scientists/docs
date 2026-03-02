@@ -1,0 +1,56 @@
+---
+title: "List Notes"
+api: "GET /v1/notes"
+description: "Retrieve all notes for the authenticated user."
+---
+
+Returns all notes ordered by position. Notes may optionally be linked to tasks.
+
+## Response
+
+<ResponseField name="data" type="object[]">
+  Array of note objects.
+  <Expandable title="Note object">
+    <ResponseField name="id" type="string">UUID of the note.</ResponseField>
+    <ResponseField name="title" type="string">Note title, or `null`.</ResponseField>
+    <ResponseField name="content" type="string">Markdown content of the note.</ResponseField>
+    <ResponseField name="summary" type="string">Auto-generated summary, or `null`.</ResponseField>
+    <ResponseField name="category" type="string">Category label, or `null`.</ResponseField>
+    <ResponseField name="linked_task_id" type="string">UUID of the linked task, or `null`.</ResponseField>
+    <ResponseField name="position" type="integer">Sort position.</ResponseField>
+    <ResponseField name="created_at" type="string">ISO 8601 timestamp.</ResponseField>
+    <ResponseField name="tasks" type="object">Linked task summary (id, title), or `null`.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of notes returned.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.nenyahq.com/functions/v1/api/v1/notes \
+  -H "Authorization: Bearer nenya_sk_your_key_here"
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "id": "770e8400-e29b-41d4-a716-446655440000",
+      "title": "Architecture decisions",
+      "content": "# Auth Refactor\n\nWe decided to use PKCE for the OAuth flow...",
+      "summary": null,
+      "category": null,
+      "linked_task_id": null,
+      "position": 1,
+      "created_at": "2025-01-15T10:30:00Z",
+      "tasks": null
+    }
+  ],
+  "count": 1
+}
+```
+</ResponseExample>

@@ -1,0 +1,79 @@
+---
+title: "MCP Authentication"
+description: "How the Nenya MCP server authenticates using OAuth 2.0 with PKCE."
+---
+
+The MCP server uses OAuth 2.0 with PKCE ([RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)) for secure authorization. Authentication is fully automatic after the initial browser-based consent.
+
+## OAuth flow
+
+<Steps>
+  <Step title="Dynamic client registration">
+    The MCP server registers itself with Nenya using [RFC 7591 Dynamic Client Registration](https://datatracker.ietf.org/doc/html/rfc7591).
+
+    ```
+    POST https://api.nenyahq.com/functions/v1/mcp-client-register
+    ```
+
+    The server receives a `client_id` (prefixed with `mcp_`) for subsequent requests.
+  </Step>
+  <Step title="Authorization request">
+    The server generates a random `code_verifier`, computes a `code_challenge` (SHA-256), and opens your browser:
+
+    ```
+    https://app.nenyahq.com/mcp/authorize?
+      client_id=mcp_...&
+      redirect_uri=...&
+      code_challenge=...&
+      code_challenge_method=S256&
+      scope=tasks:read+tasks:write
+    ```
+
+    You sign in and approve access. Nenya issues a one-time authorization code (valid for 5 minutes).
+  </Step>
+  <Step title="Token exchange">
+    The server exchanges the authorization code and `code_verifier` for tokens:
+
+    ```
+    POST https://api.nenyahq.com/functions/v1/mcp-auth-exchange
+    ```
+
+    Returns `access_token`, `refresh_token`, and `expires_in`.
+  </Step>
+</Steps>
+
+## Credential storage
+
+Tokens are stored in `~/.nenya/credentials.json` with file permissions `0o600` (owner read/write only).
+
+```json
+{
+  "access_token": "eyJhbGciOi...",
+  "refresh_token": "v1.MjA1Nj...",
+  "expires_at": 1700000000
+}
+```
+
+The server automatically refreshes the access token when it expires using the stored refresh token.
+
+## Scopes
+
+| Scope | Description |
+| ----- | ----------- |
+| `tasks:read` | Read tasks, categories, and statistics |
+| `tasks:write` | Create, update, complete, and delete tasks |
+
+## Security
+
+- **PKCE** prevents authorization code interception attacks
+- **Tokens never pass through the AI assistant** — only the local MCP server process handles credentials
+- **Authorization codes are single-use** and expire after 5 minutes
+- **Redirect URIs are validated** against a whitelist of trusted domains
+
+<Tip>
+  If you need to re-authenticate, delete the credentials file and restart:
+
+  ```bash
+  rm ~/.nenya/credentials.json
+  ```
+</Tip>

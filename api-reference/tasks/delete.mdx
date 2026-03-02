@@ -1,0 +1,49 @@
+---
+title: "Delete Task"
+api: "DELETE /v1/tasks/{id}"
+description: "Permanently delete a task."
+---
+
+Permanently deletes a task. This cannot be undone.
+
+<Warning>
+  Consider using the [Complete Task](/api-reference/tasks/complete) endpoint instead to preserve task history.
+</Warning>
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the task to delete.
+</ParamField>
+
+## Response
+
+<ResponseField name="deleted" type="boolean">
+  `true` if the task was deleted.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  The title of the deleted task.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X DELETE https://api.nenyahq.com/functions/v1/api/v1/tasks/550e8400-e29b-41d4-a716-446655440000 \
+  -H "Authorization: Bearer nenya_sk_your_key_here"
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "deleted": true,
+  "title": "Old test task"
+}
+```
+
+```json 404
+{
+  "error": "Task not found"
+}
+```
+</ResponseExample>

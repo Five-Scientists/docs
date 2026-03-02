@@ -1,0 +1,58 @@
+---
+title: "Reorder Tasks"
+api: "POST /v1/tasks/reorder"
+description: "Update the position of multiple tasks at once."
+---
+
+Set new positions for one or more tasks. Both arrays must have the same length, where `task_ids[i]` gets position `positions[i]`.
+
+## Body parameters
+
+<ParamField body="task_ids" type="string[]" required>
+  Array of task UUIDs to reorder.
+</ParamField>
+
+<ParamField body="positions" type="integer[]" required>
+  Array of new positions, corresponding to each task ID.
+</ParamField>
+
+## Response
+
+<ResponseField name="reordered" type="boolean">
+  `true` if reordering succeeded.
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Number of tasks that were reordered.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.nenyahq.com/functions/v1/api/v1/tasks/reorder \
+  -H "Authorization: Bearer nenya_sk_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "task_ids": [
+      "550e8400-e29b-41d4-a716-446655440000",
+      "550e8400-e29b-41d4-a716-446655440001",
+      "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "positions": [1, 2, 3]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "reordered": true,
+  "count": 3
+}
+```
+
+```json 400
+{
+  "error": "task_ids and positions arrays are required"
+}
+```
+</ResponseExample>

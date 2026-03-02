@@ -1,0 +1,55 @@
+---
+title: "create_task"
+description: "Create a new task from natural language text."
+---
+
+Creates a new task. You can provide plain text and Nenya will automatically extract the title, due date, priority, and categories using AI.
+
+## Parameters
+
+<ParamField body="raw_text" type="string" required>
+  The task description in natural language. Nenya extracts structured data (title, due date, priority, categories) automatically.
+</ParamField>
+
+<ParamField body="priority" type="string">
+  Explicit priority override. Options: `high`, `medium`, `low`.
+</ParamField>
+
+<ParamField body="categories" type="string[]">
+  Explicit category names. Categories are created automatically if they do not exist.
+</ParamField>
+
+<ParamField body="parent_id" type="string">
+  UUID of the parent task to create this as a subtask.
+</ParamField>
+
+## Example
+
+```
+You: Add a task: Review the auth PR by tomorrow, high priority, in Development
+
+Claude uses create_task with:
+  raw_text: "Review the auth PR by tomorrow, high priority"
+  priority: "high"
+  categories: ["Development"]
+```
+
+## Response
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Review the auth PR",
+  "raw_text": "Review the auth PR by tomorrow, high priority",
+  "status": "active",
+  "priority": "high",
+  "due_date": "2025-01-16T00:00:00Z",
+  "position": 6,
+  "created_at": "2025-01-15T10:30:00Z",
+  "processing_status": "processing"
+}
+```
+
+<Note>
+  The `processing_status: "processing"` indicates that AI extraction (title, due date, categories) is running in the background. The task is immediately available.
+</Note>

@@ -1,0 +1,45 @@
+---
+title: "list_categories"
+description: "List all your task categories with active task counts."
+---
+
+Returns all categories for the authenticated user, along with the count of active tasks in each category.
+
+## Parameters
+
+This tool takes no parameters.
+
+## Example
+
+```
+You: What categories do I have?
+
+Claude uses list_categories (no parameters)
+```
+
+## Response
+
+```json
+{
+  "categories": [
+    {
+      "id": "...",
+      "name": "Development",
+      "color": "#3B82F6",
+      "task_count": 8
+    },
+    {
+      "id": "...",
+      "name": "DevOps",
+      "color": "#8B5CF6",
+      "task_count": 3
+    },
+    {
+      "id": "...",
+      "name": "Personal",
+      "color": "#10B981",
+      "task_count": 5
+    }
+  ]
+}
+```

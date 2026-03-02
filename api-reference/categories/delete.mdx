@@ -1,0 +1,48 @@
+---
+title: "Delete Category"
+api: "DELETE /v1/categories/{id}"
+description: "Delete a category, optionally merging its tasks into another category."
+---
+
+Deletes a category. You can optionally merge tasks from the deleted category into another category.
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the category to delete.
+</ParamField>
+
+## Body parameters
+
+<ParamField body="merge_into_category_id" type="string">
+  UUID of a category to merge tasks into. If omitted, tasks are simply unlinked from the deleted category.
+</ParamField>
+
+## Response
+
+<ResponseField name="deleted" type="boolean">
+  `true` if the category was deleted.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X DELETE https://api.nenyahq.com/functions/v1/api/v1/categories/880e8400-e29b-41d4-a716-446655440000 \
+  -H "Authorization: Bearer nenya_sk_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"merge_into_category_id": "880e8400-e29b-41d4-a716-446655440001"}'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "deleted": true
+}
+```
+
+```json 404
+{
+  "error": "Category not found"
+}
+```
+</ResponseExample>

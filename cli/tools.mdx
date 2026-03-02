@@ -1,0 +1,52 @@
+---
+title: "Available Tools"
+description: "All MCP tools exposed by the Nenya server for AI assistants."
+---
+
+The Nenya MCP server exposes 9 tools that AI assistants can use to manage your tasks. These are automatically available in Claude Code after [installation](/cli/installation).
+
+## Task tools
+
+| Tool | Description |
+| ---- | ----------- |
+| [`list_tasks`](/mcp/tools/list-tasks) | List tasks with optional filters for status, priority, and category |
+| [`get_task`](/mcp/tools/get-task) | Get a single task by ID with full details |
+| [`search_tasks`](/mcp/tools/search-tasks) | Semantic search across tasks using natural language |
+| [`create_task`](/mcp/tools/create-task) | Create a new task from natural language text |
+| [`update_task`](/mcp/tools/update-task) | Update fields on an existing task |
+| [`complete_task`](/mcp/tools/complete-task) | Mark a task as completed or reopen it |
+| [`delete_task`](/mcp/tools/delete-task) | Permanently delete a task |
+
+## Organization tools
+
+| Tool | Description |
+| ---- | ----------- |
+| [`list_categories`](/mcp/tools/list-categories) | List all categories with active task counts |
+| [`get_stats`](/mcp/tools/get-stats) | Get productivity statistics and completion rates |
+
+## Example conversation
+
+Here is how a typical interaction looks in Claude Code:
+
+```
+You: What tasks do I have today?
+
+Claude: Let me check your tasks.
+[Calls list_tasks with status="active"]
+
+You have 5 active tasks:
+1. Review PR for auth refactor (high priority)
+2. Update API documentation (medium priority)
+3. Fix login page CSS bug
+4. Send weekly report
+5. Deploy staging environment
+
+You: Mark the deploy task as complete
+
+Claude: [Calls complete_task with task_id="..." completed=true]
+Done! "Deploy staging environment" is now marked as complete.
+```
+
+<Tip>
+  For detailed parameter schemas and response formats, see the [MCP Tools Reference](/mcp/tools/list-tasks).
+</Tip>

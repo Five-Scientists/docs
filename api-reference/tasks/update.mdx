@@ -1,0 +1,89 @@
+---
+title: "Update Task"
+api: "PATCH /v1/tasks/{id}"
+description: "Update one or more fields on an existing task."
+---
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the task to update.
+</ParamField>
+
+## Body parameters
+
+All fields are optional. Only the fields you include will be updated.
+
+<ParamField body="raw_text" type="string">
+  New raw text. Triggers AI re-extraction of metadata.
+</ParamField>
+
+<ParamField body="title" type="string">
+  New title.
+</ParamField>
+
+<ParamField body="due_date" type="string">
+  New due date in ISO 8601 format. Set to `null` to remove.
+</ParamField>
+
+<ParamField body="priority" type="string">
+  New priority: `high`, `medium`, `low`, or `null` to remove.
+</ParamField>
+
+<ParamField body="status" type="string">
+  New status: `active` or `completed`.
+</ParamField>
+
+<ParamField body="parent_id" type="string">
+  New parent task UUID, or `null` to make top-level.
+</ParamField>
+
+<ParamField body="position" type="integer">
+  New sort position.
+</ParamField>
+
+<ParamField body="extracted_data" type="object">
+  Updated extracted metadata. If `categories` is included, the category junction table is re-synced.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object">
+  The updated task object.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X PATCH https://api.nenyahq.com/functions/v1/api/v1/tasks/550e8400-e29b-41d4-a716-446655440000 \
+  -H "Authorization: Bearer nenya_sk_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "priority": "high",
+    "due_date": "2025-01-20T00:00:00Z"
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title": "Review PR for auth refactor",
+    "status": "active",
+    "priority": "high",
+    "due_date": "2025-01-20T00:00:00Z",
+    "position": 1,
+    "task_categories": [
+      { "category": { "id": "...", "name": "Development", "color": "#3B82F6" } }
+    ]
+  }
+}
+```
+
+```json 404
+{
+  "error": "Task not found"
+}
+```
+</ResponseExample>

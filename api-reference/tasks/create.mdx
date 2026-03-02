@@ -1,0 +1,75 @@
+---
+title: "Create Task"
+api: "POST /v1/tasks"
+description: "Create a new task."
+---
+
+## Body parameters
+
+<ParamField body="raw_text" type="string" required>
+  The task description. Nenya automatically extracts a title, due date, priority, and categories using AI.
+</ParamField>
+
+<ParamField body="priority" type="string">
+  Explicit priority. Options: `high`, `medium`, `low`.
+</ParamField>
+
+<ParamField body="parent_id" type="string">
+  UUID of the parent task to create this as a subtask.
+</ParamField>
+
+<ParamField body="categories" type="string[]">
+  Category names to assign. Categories are created automatically if they don't exist.
+</ParamField>
+
+<ParamField body="after_task_id" type="string">
+  UUID of a task to insert after. Other tasks are shifted down to make room.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object">
+  The created task object.
+</ResponseField>
+
+<ResponseField name="processing_status" type="string">
+  `processing` if AI extraction is running in the background, `skipped` otherwise.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.nenyahq.com/functions/v1/api/v1/tasks \
+  -H "Authorization: Bearer nenya_sk_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "raw_text": "Review the auth PR by Friday, high priority",
+    "categories": ["Development"]
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201
+{
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title": "Review the auth PR by Friday, high priority",
+    "raw_text": "Review the auth PR by Friday, high priority",
+    "status": "active",
+    "priority": null,
+    "due_date": null,
+    "position": 6,
+    "parent_id": null,
+    "created_at": "2025-01-15T10:30:00Z",
+    "task_categories": []
+  },
+  "processing_status": "processing"
+}
+```
+
+```json 400
+{
+  "error": "raw_text is required"
+}
+```
+</ResponseExample>

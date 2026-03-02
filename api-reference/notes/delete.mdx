@@ -1,0 +1,43 @@
+---
+title: "Delete Note"
+api: "DELETE /v1/notes/{id}"
+description: "Permanently delete a note."
+---
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the note to delete.
+</ParamField>
+
+## Response
+
+<ResponseField name="deleted" type="boolean">
+  `true` if the note was deleted.
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  The title of the deleted note.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X DELETE https://api.nenyahq.com/functions/v1/api/v1/notes/770e8400-e29b-41d4-a716-446655440000 \
+  -H "Authorization: Bearer nenya_sk_your_key_here"
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "deleted": true,
+  "title": "Meeting notes"
+}
+```
+
+```json 404
+{
+  "error": "Note not found"
+}
+```
+</ResponseExample>

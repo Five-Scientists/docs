@@ -1,0 +1,51 @@
+---
+title: "get_stats"
+description: "Get productivity statistics for your tasks."
+---
+
+Returns productivity statistics including completion rates, priority breakdown, and category distribution for a given date range.
+
+## Parameters
+
+<ParamField body="start_date" type="string">
+  Start date for statistics in ISO 8601 format. Defaults to 30 days ago.
+</ParamField>
+
+<ParamField body="end_date" type="string">
+  End date for statistics in ISO 8601 format. Defaults to now.
+</ParamField>
+
+## Example
+
+```
+You: How productive have I been this month?
+
+Claude uses get_stats with:
+  start_date: "2025-01-01T00:00:00Z"
+  end_date: "2025-01-31T23:59:59Z"
+```
+
+## Response
+
+```json
+{
+  "total_tasks": 42,
+  "completed_tasks": 35,
+  "active_tasks": 7,
+  "completion_rate": 0.833,
+  "priority_breakdown": {
+    "high": 12,
+    "medium": 18,
+    "low": 12
+  },
+  "category_breakdown": {
+    "Development": 20,
+    "DevOps": 8,
+    "Personal": 14
+  },
+  "period": {
+    "start": "2025-01-01T00:00:00Z",
+    "end": "2025-01-31T23:59:59Z"
+  }
+}
+```

@@ -1,0 +1,98 @@
+---
+title: "Installation"
+description: "Install and configure the Nenya MCP server for Claude Code."
+---
+
+## Install for Claude Code
+
+The quickest way to get started:
+
+```bash
+npx @nenyahq/mcp-server install
+```
+
+This automatically adds Nenya to your Claude Code MCP configuration file. No manual editing required.
+
+<Note>
+  You need Node.js 18 or later. Check with `node --version`.
+</Note>
+
+## Manual configuration
+
+If you prefer to configure Claude Code manually, add the following to your MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "nenya": {
+      "command": "npx",
+      "args": ["-y", "@nenyahq/mcp-server"]
+    }
+  }
+}
+```
+
+The MCP configuration file is located at:
+
+| Platform | Path |
+| -------- | ---- |
+| macOS    | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Linux    | `~/.config/Claude/claude_desktop_config.json` |
+| Windows  | `%APPDATA%\Claude\claude_desktop_config.json` |
+
+## Authentication
+
+On first use, the MCP server will:
+
+1. Open your browser to the Nenya authorization page
+2. Ask you to sign in and approve access
+3. Store credentials securely in `~/.nenya/credentials.json`
+
+Subsequent uses will authenticate automatically. Tokens are refreshed when they expire.
+
+## Run directly
+
+You can also start the MCP server as a standalone process for development or debugging:
+
+```bash
+npx @nenyahq/mcp-server
+```
+
+This starts the server on stdio, speaking the MCP JSON-RPC protocol.
+
+## Uninstall
+
+To remove Nenya from Claude Code:
+
+```bash
+npx @nenyahq/mcp-server uninstall
+```
+
+To also remove stored credentials:
+
+```bash
+rm -rf ~/.nenya
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentication fails or browser doesn't open">
+    Make sure you're running Node.js 18+ and have a default browser configured. You can also try clearing credentials and re-authenticating:
+
+    ```bash
+    rm ~/.nenya/credentials.json
+    ```
+  </Accordion>
+  <Accordion title="Claude Code doesn't see the tools">
+    Restart Claude Code after installing the MCP server. Check that the configuration file contains the `nenya` entry under `mcpServers`.
+  </Accordion>
+  <Accordion title="Permission denied errors">
+    Ensure the `~/.nenya` directory has correct permissions:
+
+    ```bash
+    chmod 700 ~/.nenya
+    chmod 600 ~/.nenya/credentials.json
+    ```
+  </Accordion>
+</AccordionGroup>

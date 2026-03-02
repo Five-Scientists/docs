@@ -1,0 +1,61 @@
+---
+title: "Complete Task"
+api: "POST /v1/tasks/{id}/complete"
+description: "Mark a task as completed or reopen it."
+---
+
+Toggle a task between completed and active status. When completing a top-level task, all descendant subtasks are automatically completed as well.
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the task.
+</ParamField>
+
+## Body parameters
+
+<ParamField body="completed" type="boolean">
+  `true` to complete, `false` to reopen. If omitted, the status is toggled automatically.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object">
+  The updated task object.
+</ResponseField>
+
+<ResponseField name="updated_subtask_ids" type="string[]">
+  UUIDs of any subtasks that were automatically completed or reopened along with the parent.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.nenyahq.com/functions/v1/api/v1/tasks/550e8400-e29b-41d4-a716-446655440000/complete \
+  -H "Authorization: Bearer nenya_sk_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"completed": true}'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title": "Deploy staging environment",
+    "status": "completed",
+    "completed_at": "2025-01-15T14:30:00Z",
+    "task_categories": []
+  },
+  "updated_subtask_ids": [
+    "660e8400-e29b-41d4-a716-446655440001"
+  ]
+}
+```
+
+```json 404
+{
+  "error": "Task not found"
+}
+```
+</ResponseExample>

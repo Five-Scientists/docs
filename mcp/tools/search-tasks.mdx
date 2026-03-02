@@ -1,0 +1,58 @@
+---
+title: "search_tasks"
+description: "Semantic search across your tasks using natural language."
+---
+
+Search tasks using natural language. Uses vector embeddings for semantic matching, so you can find tasks by meaning rather than exact keywords.
+
+For example, searching "project deadlines" will match tasks like "finish Q1 report by Friday."
+
+## Parameters
+
+<ParamField body="query" type="string" required>
+  Natural language search query.
+</ParamField>
+
+<ParamField body="limit" type="number" default="10">
+  Maximum number of results to return.
+</ParamField>
+
+<ParamField body="status" type="string" default="active">
+  Filter results by status. Options: `active`, `completed`, `all`.
+</ParamField>
+
+## Example
+
+```
+You: Find any tasks related to the API documentation
+
+Claude uses search_tasks with:
+  query: "API documentation"
+  status: "all"
+```
+
+## Response
+
+Returns tasks ranked by relevance:
+
+```json
+{
+  "tasks": [
+    {
+      "id": "...",
+      "title": "Update REST API docs for v2",
+      "status": "active",
+      "priority": "medium",
+      "similarity": 0.89
+    },
+    {
+      "id": "...",
+      "title": "Write OpenAPI spec for new endpoints",
+      "status": "completed",
+      "priority": "high",
+      "similarity": 0.76
+    }
+  ],
+  "count": 2
+}
+```

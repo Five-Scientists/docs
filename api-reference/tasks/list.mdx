@@ -1,0 +1,82 @@
+---
+title: "List Tasks"
+api: "GET /v1/tasks"
+description: "Retrieve a list of tasks with optional filters."
+---
+
+## Query parameters
+
+<ParamField query="status" type="string" default="active">
+  Filter by task status. Options: `active`, `completed`, `all`.
+</ParamField>
+
+<ParamField query="priority" type="string">
+  Filter by priority level. Options: `high`, `medium`, `low`.
+</ParamField>
+
+<ParamField query="category" type="string">
+  Filter by category name (case-insensitive).
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Maximum number of tasks to return.
+</ParamField>
+
+<ParamField query="parent_id" type="string">
+  Filter by parent task ID. Use `null` to get only top-level tasks.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object[]">
+  Array of task objects.
+  <Expandable title="Task object">
+    <ResponseField name="id" type="string">UUID of the task.</ResponseField>
+    <ResponseField name="title" type="string">Task title.</ResponseField>
+    <ResponseField name="raw_text" type="string">Original input text.</ResponseField>
+    <ResponseField name="status" type="string">`active` or `completed`.</ResponseField>
+    <ResponseField name="priority" type="string">Priority level: `high`, `medium`, `low`, or `null`.</ResponseField>
+    <ResponseField name="due_date" type="string">ISO 8601 date, or `null`.</ResponseField>
+    <ResponseField name="position" type="integer">Sort position within parent scope.</ResponseField>
+    <ResponseField name="parent_id" type="string">UUID of parent task, or `null` for top-level.</ResponseField>
+    <ResponseField name="created_at" type="string">ISO 8601 timestamp.</ResponseField>
+    <ResponseField name="completed_at" type="string">ISO 8601 timestamp, or `null`.</ResponseField>
+    <ResponseField name="task_categories" type="object[]">Associated categories.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="count" type="integer">
+  Total number of tasks returned.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.nenyahq.com/functions/v1/api/v1/tasks?status=active&priority=high \
+  -H "Authorization: Bearer nenya_sk_your_key_here"
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "title": "Review PR for auth refactor",
+      "raw_text": "Review PR for auth refactor",
+      "status": "active",
+      "priority": "high",
+      "due_date": null,
+      "position": 1,
+      "parent_id": null,
+      "created_at": "2025-01-15T10:30:00Z",
+      "completed_at": null,
+      "task_categories": [
+        { "category": { "id": "...", "name": "Development", "color": "#3B82F6" } }
+      ]
+    }
+  ],
+  "count": 1
+}
+```
+</ResponseExample>

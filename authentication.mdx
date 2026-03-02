@@ -1,0 +1,76 @@
+---
+title: "Authentication"
+description: "How to authenticate with the Nenya API and MCP server."
+---
+
+Nenya supports three authentication methods depending on your integration.
+
+## API keys
+
+The simplest way to authenticate REST API requests. Generate a key from the [Nenya app](https://app.nenyahq.com) under **Settings > API Keys**.
+
+API keys use the `nenya_sk_` prefix and are passed as Bearer tokens:
+
+```bash
+curl https://api.nenyahq.com/functions/v1/api/v1/tasks \
+  -H "Authorization: Bearer nenya_sk_your_key_here"
+```
+
+<Warning>
+  Treat API keys like passwords. Do not commit them to version control or share them publicly.
+</Warning>
+
+## JWT tokens
+
+If you are building a client application that authenticates users via Supabase Auth, you can use the JWT token directly:
+
+```bash
+curl https://api.nenyahq.com/functions/v1/api/v1/tasks \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."
+```
+
+JWT tokens are short-lived and automatically scoped to the authenticated user via Row-Level Security.
+
+## OAuth 2.0 with PKCE (MCP)
+
+The MCP server uses OAuth 2.0 with PKCE ([RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)) for secure authorization. This flow is handled automatically when you use the MCP server with Claude Code or other AI assistants.
+
+### How it works
+
+<Steps>
+  <Step title="Client registration">
+    The AI client registers itself with Nenya's authorization server using [Dynamic Client Registration (RFC 7591)](https://datatracker.ietf.org/doc/html/rfc7591).
+
+    **Endpoint:** `https://api.nenyahq.com/functions/v1/mcp-client-register`
+  </Step>
+  <Step title="Authorization">
+    A browser window opens where you sign in and approve access. The client sends a `code_challenge` (SHA-256 hash of a random `code_verifier`) to prevent interception.
+
+    **Endpoint:** `https://app.nenyahq.com/mcp/authorize`
+
+    **Scopes:** `tasks:read`, `tasks:write`
+  </Step>
+  <Step title="Token exchange">
+    The client exchanges the authorization code and original `code_verifier` for access and refresh tokens.
+
+    **Endpoint:** `https://api.nenyahq.com/functions/v1/mcp-auth-exchange`
+  </Step>
+</Steps>
+
+### Credential storage
+
+The MCP server stores tokens in `~/.nenya/credentials.json` with restricted file permissions (`0o600`). Tokens are automatically refreshed when they expire.
+
+### Supported clients
+
+The OAuth flow supports redirect URIs from these trusted domains:
+
+- `claude.ai`
+- `anthropic.com`
+- `chatgpt.com`
+- `openai.com`
+- `localhost` (for local development)
+
+<Tip>
+  For most users, authentication is fully automatic. Just run `npx @nenyahq/mcp-server install` and approve access when prompted.
+</Tip>

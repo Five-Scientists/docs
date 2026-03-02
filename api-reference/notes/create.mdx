@@ -1,0 +1,66 @@
+---
+title: "Create Note"
+api: "POST /v1/notes"
+description: "Create a new note."
+---
+
+Creates a new note. Notes are placed at the top of the list by default.
+
+## Body parameters
+
+<ParamField body="content" type="string" required>
+  Markdown content of the note.
+</ParamField>
+
+<ParamField body="title" type="string">
+  Title for the note.
+</ParamField>
+
+<ParamField body="category" type="string">
+  Category label for the note.
+</ParamField>
+
+<ParamField body="linked_task_id" type="string">
+  UUID of a task to link this note to.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object">
+  The created note object.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.nenyahq.com/functions/v1/api/v1/notes \
+  -H "Authorization: Bearer nenya_sk_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Meeting notes",
+    "content": "# Sprint Planning\n\n- Discussed auth refactor timeline\n- Agreed on PKCE approach"
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201
+{
+  "data": {
+    "id": "770e8400-e29b-41d4-a716-446655440000",
+    "title": "Meeting notes",
+    "content": "# Sprint Planning\n\n- Discussed auth refactor timeline\n- Agreed on PKCE approach",
+    "summary": null,
+    "category": null,
+    "linked_task_id": null,
+    "position": -1,
+    "created_at": "2025-01-15T10:30:00Z"
+  }
+}
+```
+
+```json 400
+{
+  "error": "content is required"
+}
+```
+</ResponseExample>

@@ -1,0 +1,45 @@
+---
+title: "get_task"
+description: "Get a single task by its unique ID."
+---
+
+Retrieves the full details of a specific task, including its categories, subtasks, and metadata.
+
+## Parameters
+
+<ParamField body="task_id" type="string" required>
+  The unique UUID of the task.
+</ParamField>
+
+## Example
+
+```
+You: Show me the details of that deploy task
+
+Claude uses get_task with:
+  task_id: "550e8400-e29b-41d4-a716-446655440000"
+```
+
+## Response
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Deploy staging environment",
+  "raw_text": "Deploy staging environment by Friday",
+  "status": "active",
+  "priority": "high",
+  "due_date": "2025-01-17T00:00:00Z",
+  "position": 3,
+  "parent_id": null,
+  "created_at": "2025-01-15T10:30:00Z",
+  "completed_at": null,
+  "extracted_data": {
+    "categories": ["DevOps"],
+    "estimated_duration": "30 minutes"
+  },
+  "categories": [
+    { "id": "...", "name": "DevOps", "color": "#8B5CF6" }
+  ]
+}
+```

@@ -1,0 +1,55 @@
+---
+title: "Get Task"
+api: "GET /v1/tasks/{id}"
+description: "Retrieve a single task by ID."
+---
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the task.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object">
+  The task object with full details including categories.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.nenyahq.com/functions/v1/api/v1/tasks/550e8400-e29b-41d4-a716-446655440000 \
+  -H "Authorization: Bearer nenya_sk_your_key_here"
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title": "Review PR for auth refactor",
+    "raw_text": "Review PR for auth refactor",
+    "status": "active",
+    "priority": "high",
+    "due_date": null,
+    "position": 1,
+    "parent_id": null,
+    "created_at": "2025-01-15T10:30:00Z",
+    "completed_at": null,
+    "extracted_data": {
+      "categories": ["Development"]
+    },
+    "task_categories": [
+      { "category": { "id": "...", "name": "Development", "color": "#3B82F6" } }
+    ]
+  }
+}
+```
+
+```json 404
+{
+  "error": "Task not found"
+}
+```
+</ResponseExample>

@@ -1,0 +1,55 @@
+---
+title: "MCP Overview"
+description: "The Nenya MCP server lets AI assistants manage your tasks via the Model Context Protocol."
+---
+
+The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard that lets AI assistants interact with external tools and data sources. The Nenya MCP server implements this protocol, giving AI assistants like Claude direct access to your task management system.
+
+## Architecture
+
+The MCP server runs as a local process on your machine. It communicates with the AI assistant over **stdio** using JSON-RPC, and authenticates to the Nenya API using OAuth 2.0 with PKCE.
+
+```
+┌─────────────┐     stdio/JSON-RPC     ┌──────────────┐      HTTPS       ┌─────────────┐
+│  AI Client   │ ◄──────────────────► │  MCP Server   │ ◄──────────────► │  Nenya API   │
+│ (Claude Code)│                       │ (local process)│                  │  (Supabase)  │
+└─────────────┘                       └──────────────┘                  └─────────────┘
+```
+
+Your credentials are stored locally and never pass through the AI assistant.
+
+## Available tools
+
+The server exposes 9 tools:
+
+| Tool | Description |
+| ---- | ----------- |
+| `list_tasks` | List tasks with filters for status, priority, and category |
+| `get_task` | Get a single task by ID |
+| `search_tasks` | Semantic search across your tasks |
+| `create_task` | Create a new task from text |
+| `update_task` | Update an existing task |
+| `complete_task` | Mark a task as completed or reopen it |
+| `delete_task` | Permanently delete a task |
+| `list_categories` | List all categories with task counts |
+| `get_stats` | Get productivity statistics |
+
+## Package info
+
+| | |
+| --- | --- |
+| **npm** | [`@nenyahq/mcp-server`](https://www.npmjs.com/package/@nenyahq/mcp-server) |
+| **Version** | 0.1.4 |
+| **Node.js** | >= 18.0.0 |
+| **Protocol** | MCP over stdio (JSON-RPC) |
+
+## Getting started
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/cli/installation">
+    Install the MCP server for Claude Code.
+  </Card>
+  <Card title="Authentication" icon="lock" href="/mcp/authentication">
+    Learn about the OAuth 2.0 + PKCE flow.
+  </Card>
+</CardGroup>

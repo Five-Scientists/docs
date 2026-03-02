@@ -1,0 +1,47 @@
+---
+title: "complete_task"
+description: "Mark a task as completed or reopen it."
+---
+
+Toggles a task between completed and active status. Use `completed=true` to complete a task, or `completed=false` to reopen it.
+
+When completing a top-level task, all descendant subtasks are automatically completed as well.
+
+## Parameters
+
+<ParamField body="task_id" type="string" required>
+  The unique UUID of the task.
+</ParamField>
+
+<ParamField body="completed" type="boolean" required>
+  `true` to mark as completed, `false` to reopen.
+</ParamField>
+
+## Example
+
+```
+You: Mark the deploy task as done
+
+Claude uses complete_task with:
+  task_id: "550e8400-e29b-41d4-a716-446655440000"
+  completed: true
+```
+
+## Response
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Deploy staging environment",
+  "status": "completed",
+  "completed_at": "2025-01-15T14:30:00Z",
+  "updated_subtask_ids": [
+    "660e8400-e29b-41d4-a716-446655440001",
+    "660e8400-e29b-41d4-a716-446655440002"
+  ]
+}
+```
+
+<Note>
+  The `updated_subtask_ids` array lists any subtasks that were automatically completed along with the parent task.
+</Note>

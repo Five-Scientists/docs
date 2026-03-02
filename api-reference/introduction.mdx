@@ -1,33 +1,100 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "API Reference"
+description: "The Nenya REST API for managing tasks, notes, and categories."
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+The Nenya REST API gives you full access to tasks, notes, and categories over HTTP. Use it to build integrations, automations, or custom clients.
 
-## Welcome
+## Base URL
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+```
+https://api.nenyahq.com/functions/v1/api
+```
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+All endpoints are prefixed with `/v1/`.
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Every request must include an `Authorization` header with a Bearer token. Nenya supports two token types:
 
+<Tabs>
+  <Tab title="API Key">
+    Generate an API key from the [Nenya app](https://app.nenyahq.com) under **Settings > API Keys**.
+
+    ```bash
+    curl https://api.nenyahq.com/functions/v1/api/v1/tasks \
+      -H "Authorization: Bearer nenya_sk_your_key_here"
+    ```
+  </Tab>
+  <Tab title="JWT Token">
+    Use a Supabase Auth JWT token for client applications.
+
+    ```bash
+    curl https://api.nenyahq.com/functions/v1/api/v1/tasks \
+      -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."
+    ```
+  </Tab>
+</Tabs>
+
+## Response format
+
+All responses return JSON with a consistent structure:
+
+**Success:**
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "data": { ... },
+  "count": 10
+}
 ```
+
+**Error:**
+```json
+{
+  "error": "Description of what went wrong"
+}
+```
+
+## HTTP status codes
+
+| Code | Description |
+| ---- | ----------- |
+| `200` | Success |
+| `201` | Created |
+| `400` | Bad request (invalid parameters) |
+| `401` | Unauthorized (missing or invalid token) |
+| `404` | Resource not found |
+| `500` | Internal server error |
+
+## Endpoints
+
+### Tasks
+
+| Method | Endpoint | Description |
+| ------ | -------- | ----------- |
+| `GET` | [`/v1/tasks`](/api-reference/tasks/list) | List tasks with filters |
+| `GET` | [`/v1/tasks/:id`](/api-reference/tasks/get) | Get a single task |
+| `POST` | [`/v1/tasks`](/api-reference/tasks/create) | Create a task |
+| `PATCH` | [`/v1/tasks/:id`](/api-reference/tasks/update) | Update a task |
+| `DELETE` | [`/v1/tasks/:id`](/api-reference/tasks/delete) | Delete a task |
+| `POST` | [`/v1/tasks/:id/complete`](/api-reference/tasks/complete) | Toggle task completion |
+| `POST` | [`/v1/tasks/reorder`](/api-reference/tasks/reorder) | Reorder tasks |
+
+### Notes
+
+| Method | Endpoint | Description |
+| ------ | -------- | ----------- |
+| `GET` | [`/v1/notes`](/api-reference/notes/list) | List notes |
+| `GET` | [`/v1/notes/:id`](/api-reference/notes/get) | Get a single note |
+| `POST` | [`/v1/notes`](/api-reference/notes/create) | Create a note |
+| `PATCH` | [`/v1/notes/:id`](/api-reference/notes/update) | Update a note |
+| `DELETE` | [`/v1/notes/:id`](/api-reference/notes/delete) | Delete a note |
+
+### Categories
+
+| Method | Endpoint | Description |
+| ------ | -------- | ----------- |
+| `GET` | [`/v1/categories`](/api-reference/categories/list) | List categories |
+| `POST` | [`/v1/categories`](/api-reference/categories/create) | Create a category |
+| `PATCH` | [`/v1/categories/:id`](/api-reference/categories/update) | Update a category |
+| `DELETE` | [`/v1/categories/:id`](/api-reference/categories/delete) | Delete a category |

@@ -1,0 +1,58 @@
+---
+title: "Update Category"
+api: "PATCH /v1/categories/{id}"
+description: "Rename a category or change its color."
+---
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the category to update.
+</ParamField>
+
+## Body parameters
+
+<ParamField body="name" type="string">
+  New category name.
+</ParamField>
+
+<ParamField body="color" type="string">
+  New hex color code.
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="object">
+  The updated category object.
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X PATCH https://api.nenyahq.com/functions/v1/api/v1/categories/880e8400-e29b-41d4-a716-446655440000 \
+  -H "Authorization: Bearer nenya_sk_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Frontend",
+    "color": "#EC4899"
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "id": "880e8400-e29b-41d4-a716-446655440000",
+    "name": "Frontend",
+    "color": "#EC4899",
+    "created_at": "2025-01-10T08:00:00Z"
+  }
+}
+```
+
+```json 404
+{
+  "error": "Category not found"
+}
+```
+</ResponseExample>
